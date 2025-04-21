@@ -14,7 +14,7 @@ jobs:
 
       - name: Check the current published version
         run: |
-          LAST_PUBLISHED_VERSION=$(pnpm view express version)
+          LAST_PUBLISHED_VERSION=$(npm view nestjs-backend-common version 2> /dev/null)
           PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g')
           if [[ $LAST_PUBLISHED_VERSION == $PACKAGE_VERSION ]]; then
             echo "Version is published already, if you need to publish a new version please increase the version in package.json"
