@@ -1,9 +1,13 @@
-name: Publish a library on npm
+name: Publish The Library
 
 on:
   push:
     branches:
       - main
+
+permissions:
+  # https://stackoverflow.com/a/72183279/8784518
+  id-token: write
 
 jobs:
   build:
