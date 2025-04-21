@@ -1,4 +1,5 @@
 import type { Request } from 'express';
+import type { Observable } from 'rxjs';
 
 import {
   CallHandler,
@@ -10,7 +11,6 @@ import {
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { randomUUID } from 'crypto';
 import { ClsService } from 'nestjs-cls';
-import { Observable } from 'rxjs';
 
 import { CommonExecutionContext } from '../types';
 import {
