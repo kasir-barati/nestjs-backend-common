@@ -8,7 +8,9 @@ import { CorrelationIdModuleOptions } from './correlation-id.type';
 
 @Module({})
 export class CorrelationIdModule {
-  forRoot(options?: CorrelationIdModuleOptions): DynamicModule {
+  static forRoot(
+    options?: CorrelationIdModuleOptions,
+  ): DynamicModule {
     return {
       global: options?.isGlobal ?? false,
       module: CorrelationIdModule,
