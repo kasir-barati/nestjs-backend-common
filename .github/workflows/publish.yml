@@ -31,11 +31,12 @@ jobs:
         with:
           node-version: 22
           cache: "pnpm"
+          registry-url: "https://registry.npmjs.org/"
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Publish Package on npm 📦
-        run: pnpm publish --access public --no-git-checks
+        run: pnpm publish --provenance --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
