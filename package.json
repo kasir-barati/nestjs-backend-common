@@ -1,8 +1,8 @@
 {
   "name": "nestjs-backend-common",
-  "version": "0.0.1",
-  "main": "dist/index",
-  "types": "dist/index",
+  "version": "0.0.2",
+  "main": "dist/src/index",
+  "types": "dist/src/index",
   "scripts": {
     "test:unit": "jest",
     "build": "rm -rf dist && tsc --project tsconfig.build.json",
