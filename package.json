@@ -5,7 +5,7 @@
   "types": "dist/index",
   "scripts": {
     "test:unit": "jest",
-    "build": "rm -rf dist && tsc",
+    "build": "rm -rf dist && tsc --project tsconfig.build.json",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "prepublish": "npm run build"
@@ -40,6 +40,7 @@
     "@types/express": "^5.0.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.14.1",
+    "eslint": "^9.25.0",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-perfectionist": "^4.11.0",
     "eslint-plugin-prettier": "^5.2.6",
