@@ -1,6 +1,6 @@
 {
   "name": "nestjs-backend-common",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "dist/src/index",
   "types": "dist/src/index",
   "scripts": {
@@ -29,11 +29,14 @@
   },
   "homepage": "https://github.com/kasir-barati/nestjs-backend-common#readme",
   "description": "All the utility functions and common modules I usually use in my NestJS applications will be published and maintained here.",
+  "peerDependencies": {
+    "nestjs-cls": "^5.4.3",
+    "reflect-metadata": "^0.2.2"
+  },
   "dependencies": {
     "@nestjs/common": "^11.0.20",
     "@nestjs/core": "^11.0.20",
     "@nestjs/graphql": "^13.1.0",
-    "nestjs-cls": "^5.4.3",
     "rxjs": "^7.8.2"
   },
   "devDependencies": {
