@@ -1,4 +1,4 @@
-import type { Request } from "express";
+import type { Request } from 'express';
 
 import {
   CallHandler,
@@ -6,14 +6,14 @@ import {
   Injectable,
   Logger,
   NestInterceptor,
-} from "@nestjs/common";
-import { randomUUID } from "crypto";
-import { ClsService } from "nestjs-cls";
+} from '@nestjs/common';
+import { randomUUID } from 'crypto';
+import { ClsService } from 'nestjs-cls';
 
 import {
   CORRELATION_ID_CLS_KEY,
   CORRELATION_ID_HEADER_NAME,
-} from "./correlation-id.constant";
+} from './correlation-id.constant';
 
 @Injectable()
 export class CorrelationIdInterceptor implements NestInterceptor {
@@ -25,10 +25,12 @@ export class CorrelationIdInterceptor implements NestInterceptor {
     let correlationId: string;
 
     switch (executionContext.getType()) {
-      case "http": {
-        const request: Request = executionContext.switchToHttp().getRequest();
+      case 'http': {
+        const request: Request = executionContext
+          .switchToHttp()
+          .getRequest();
         const correlationIdValue = Array.isArray(
-          request.headers[CORRELATION_ID_HEADER_NAME]
+          request.headers[CORRELATION_ID_HEADER_NAME],
         )
           ? request.headers[CORRELATION_ID_HEADER_NAME][0]
           : request.headers[CORRELATION_ID_HEADER_NAME];
@@ -37,7 +39,7 @@ export class CorrelationIdInterceptor implements NestInterceptor {
 
         break;
       }
-      case "rpc": {
+      case 'rpc': {
         const { correlationId: correlationIdValue } = executionContext
           .switchToRpc()
           .getContext<{ correlationId?: string }>();
@@ -47,7 +49,7 @@ export class CorrelationIdInterceptor implements NestInterceptor {
         break;
       }
       default:
-        throw new Error("Unimplemented request type");
+        throw new Error('Unimplemented request type');
     }
 
     this.clsService.set(CORRELATION_ID_CLS_KEY, correlationId);

@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "build": "rm -rf dist && tsc",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "prepublish": "npm build"
   },
   "repository": {
@@ -35,6 +36,7 @@
     "@eslint/js": "^9.25.0",
     "@types/express": "^5.0.1",
     "@types/node": "^22.14.1",
+    "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-perfectionist": "^4.11.0",
     "eslint-plugin-prettier": "^5.2.6",
     "globals": "^16.0.0",

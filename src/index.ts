@@ -1,1 +1,1 @@
-export * from "./correlation-id";
+export * from './correlation-id';
