@@ -1,0 +1,45 @@
+{
+  "name": "nestjs-backend-common",
+  "version": "0.0.0",
+  "main": "dist/index",
+  "types": "dist/index",
+  "scripts": {
+    "test": "jest",
+    "build": "rm -rf dist && tsc",
+    "prepublish": "npm build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/kasir-barati/nestjs-backend-common.git"
+  },
+  "keywords": [
+    "npm",
+    "common",
+    "nestjs",
+    "nodejs",
+    "javascript",
+    "typescript"
+  ],
+  "author": "kasir-barati",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kasir-barati/nestjs-backend-common/issues"
+  },
+  "homepage": "https://github.com/kasir-barati/nestjs-backend-common#readme",
+  "description": "All the utility functions and common modules I usually use in my NestJS applications will be published and maintained here.",
+  "dependencies": {
+    "@nestjs/common": "^11.0.20",
+    "nestjs-cls": "^5.4.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.14.1",
+    "eslint-plugin-perfectionist": "^4.11.0",
+    "eslint-plugin-prettier": "^5.2.6",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.30.1"
+  }
+}

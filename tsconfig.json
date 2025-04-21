@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2024",
+    "experimentalDecorators": true,
+    "module": "NodeNext",
+    "rootDir": "./",
+    "outDir": "./dist",
+    "moduleResolution": "nodenext",
+    "sourceMap": true,
+    "removeComments": false,
+    "newLine": "crlf",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "skipLibCheck": true
+  }
+}
