@@ -10,6 +10,7 @@ import {
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { randomUUID } from 'crypto';
 import { ClsService } from 'nestjs-cls';
+import { Observable } from 'rxjs';
 
 import { CommonExecutionContext } from '../types';
 import {
@@ -23,7 +24,10 @@ export class CorrelationIdInterceptor implements NestInterceptor {
 
   constructor(private readonly clsService: ClsService) {}
 
-  intercept(executionContext: ExecutionContext, next: CallHandler) {
+  intercept(
+    executionContext: ExecutionContext,
+    next: CallHandler,
+  ): Observable<unknown> {
     let correlationId: string;
 
     switch (executionContext.getType<CommonExecutionContext>()) {
