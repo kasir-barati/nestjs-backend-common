@@ -7,9 +7,11 @@ import {
   Logger,
   NestInterceptor,
 } from '@nestjs/common';
+import { GqlExecutionContext } from '@nestjs/graphql';
 import { randomUUID } from 'crypto';
 import { ClsService } from 'nestjs-cls';
 
+import { CommonExecutionContext } from '../types';
 import {
   CORRELATION_ID_CLS_KEY,
   CORRELATION_ID_HEADER_NAME,
@@ -24,7 +26,7 @@ export class CorrelationIdInterceptor implements NestInterceptor {
   intercept(executionContext: ExecutionContext, next: CallHandler) {
     let correlationId: string;
 
-    switch (executionContext.getType()) {
+    switch (executionContext.getType<CommonExecutionContext>()) {
       case 'http': {
         const request: Request = executionContext
           .switchToHttp()
@@ -36,6 +38,16 @@ export class CorrelationIdInterceptor implements NestInterceptor {
           : request.headers[CORRELATION_ID_HEADER_NAME];
 
         correlationId = correlationIdValue ?? randomUUID();
+
+        break;
+      }
+      case 'graphql': {
+        const ctx = GqlExecutionContext.create(executionContext);
+        const req: Request = ctx.getContext().req;
+
+        correlationId = req.headers[
+          CORRELATION_ID_HEADER_NAME
+        ] as string;
 
         break;
       }
