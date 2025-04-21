@@ -20,7 +20,7 @@ jobs:
         run: |
           LAST_PUBLISHED_VERSION=$(npm view nestjs-backend-common version 2> /dev/null || echo "")
           PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g')
-          [[ $LAST_PUBLISHED_VERSION == $PACKAGE_VERSION ]] && exit 1
+          [[ $LAST_PUBLISHED_VERSION == $PACKAGE_VERSION ]] && exit 1 || exit 0
 
       - uses: pnpm/action-setup@v4
         name: Install pnpm
