@@ -7,10 +7,18 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-24
+    runs-on: ubuntu-22
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Check the current published version
+        run: |
+          LAST_PUBLISHED_VERSION=$(pnpm view express version)
+          PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g')
+          if [[ $LAST_PUBLISHED_VERSION == $PACKAGE_VERSION ]]; then
+            echo "Version is published already, if you need to publish a new version please increase the version in package.json"
+            exit 1
 
       - uses: pnpm/action-setup@v4
         name: Install pnpm
