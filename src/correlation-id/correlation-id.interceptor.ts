@@ -31,11 +31,11 @@ export class CorrelationIdInterceptor implements NestInterceptor {
         const request: Request = executionContext
           .switchToHttp()
           .getRequest();
-        const correlationIdValue = Array.isArray(
-          request.headers[CORRELATION_ID_HEADER_NAME],
-        )
-          ? request.headers[CORRELATION_ID_HEADER_NAME][0]
-          : request.headers[CORRELATION_ID_HEADER_NAME];
+        const correlationIdHeader =
+          request.headers[CORRELATION_ID_HEADER_NAME];
+        const correlationIdValue = Array.isArray(correlationIdHeader)
+          ? correlationIdHeader[0]
+          : correlationIdHeader;
 
         correlationId = correlationIdValue ?? randomUUID();
 
@@ -43,11 +43,14 @@ export class CorrelationIdInterceptor implements NestInterceptor {
       }
       case 'graphql': {
         const ctx = GqlExecutionContext.create(executionContext);
-        const req: Request = ctx.getContext().req;
+        const request: Request = ctx.getContext().req;
+        const correlationIdHeader =
+          request.headers[CORRELATION_ID_HEADER_NAME];
+        const correlationIdValue = Array.isArray(correlationIdHeader)
+          ? correlationIdHeader[0]
+          : correlationIdHeader;
 
-        correlationId = req.headers[
-          CORRELATION_ID_HEADER_NAME
-        ] as string;
+        correlationId = correlationIdValue ?? randomUUID();
 
         break;
       }
