@@ -8,7 +8,9 @@
     "build": "rm -rf dist && tsc --project tsconfig.build.json",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "prepublish": "npm run build"
+    "format": "prettier -w -u .",
+    "prepublish": "npm run build",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -37,6 +39,7 @@
   },
   "dependencies": {
     "@nestjs/graphql": "^13.1.0",
+    "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "rxjs": "^7.8.2"
   },
@@ -50,6 +53,7 @@
     "eslint-plugin-perfectionist": "^4.11.0",
     "eslint-plugin-prettier": "^5.2.6",
     "globals": "^16.0.0",
+    "husky": "^9.1.7",
     "jest": "^29.7.0",
     "jest-extended": "^4.0.2",
     "prettier": "^3.5.3",
