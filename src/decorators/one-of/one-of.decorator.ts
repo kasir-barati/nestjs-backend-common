@@ -1,11 +1,11 @@
-import { applyDecorators } from "@nestjs/common";
+import { applyDecorators } from '@nestjs/common';
 import {
   registerDecorator,
   ValidateIf,
   ValidationArguments,
   ValidatorConstraint,
   ValidatorConstraintInterface,
-} from "class-validator";
+} from 'class-validator';
 
 /**
  * @description
@@ -14,28 +14,33 @@ import {
 export function OneOf(properties: string[]) {
   return function (target: any) {
     for (const property of properties) {
-      const otherProps = properties.filter((prop) => prop !== property);
+      const otherProps = properties.filter(
+        (prop) => prop !== property,
+      );
 
       applyDecorators(
         ValidateIf((obj: Record<string, unknown>) => {
           const areOtherPropsUndefined = otherProps.reduce(
             (acc, prop) => acc && obj[prop] === undefined,
-            true
+            true,
           );
           const isCurrentPropDefined = obj[property] !== undefined;
 
           return isCurrentPropDefined || areOtherPropsUndefined;
         }),
-        OneOfChecker(properties)
+        OneOfChecker(properties),
       )(target.prototype, property);
     }
   };
 }
 
 function OneOfChecker(properties: string[]): PropertyDecorator {
-  return function (object: Object, propertyName: string | symbol): void {
+  return function (
+    object: object,
+    propertyName: string | symbol,
+  ): void {
     registerDecorator({
-      name: "OneOfChecker",
+      name: 'OneOfChecker',
       constraints: [properties],
       target: object.constructor,
       propertyName: String(propertyName),
@@ -44,17 +49,20 @@ function OneOfChecker(properties: string[]): PropertyDecorator {
   };
 }
 
-@ValidatorConstraint({ name: "OneOfChecker" })
+@ValidatorConstraint({ name: 'OneOfChecker' })
 class OneOfCheckerConstraint implements ValidatorConstraintInterface {
   validate(
     value: unknown,
-    validationArguments: ValidationArguments
+    validationArguments: ValidationArguments,
   ): boolean | Promise<boolean> {
     let [properties] = validationArguments.constraints as [string[]];
     properties = properties.filter(
-      (property) => property !== validationArguments.property
+      (property) => property !== validationArguments.property,
     );
-    const data = validationArguments.object as Record<string, unknown>;
+    const data = validationArguments.object as Record<
+      string,
+      unknown
+    >;
 
     for (const property of properties) {
       const propertyValue = data[property];
@@ -67,18 +75,20 @@ class OneOfCheckerConstraint implements ValidatorConstraintInterface {
   }
 
   defaultMessage(validationArguments: ValidationArguments): string {
-    const [properties] = validationArguments.constraints as [string[]];
+    const [properties] = validationArguments.constraints as [
+      string[],
+    ];
     const props = properties.reduce((accumulator, current, index) => {
       if (index === properties.length - 2) {
-        accumulator += current + ", and ";
+        accumulator += current + ', and ';
       } else if (index === properties.length - 1) {
         accumulator += current;
       } else {
-        accumulator += current + ", ";
+        accumulator += current + ', ';
       }
 
       return accumulator;
-    }, "");
+    }, '');
 
     return `Do not send ${props} at the same time!`;
   }
