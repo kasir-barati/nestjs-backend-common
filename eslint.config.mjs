@@ -94,6 +94,7 @@ export default tseslint.config(
     ignores: ['*decorator.ts', '*.spec.ts'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/unbound-method': 'off',
     },
   },
 );

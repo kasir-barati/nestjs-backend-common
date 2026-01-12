@@ -38,13 +38,15 @@
     "reflect-metadata": "^0.2.2"
   },
   "dependencies": {
-    "@nestjs/graphql": "^13.1.0",
+    "@nestjs/graphql": "^v11.0.6",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "rxjs": "^7.8.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
+    "@grpc/grpc-js": "^1.14.3",
+    "@nestjs/testing": "^11.1.11",
     "@types/express": "^5.0.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.14.1",

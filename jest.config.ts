@@ -6,4 +6,5 @@ export default {
     '^.+.tsx?$': ['ts-jest', {}],
   },
   setupFilesAfterEnv: ['./jest-setup-after-env.ts'],
+  testMatch: ['**/*.spec.ts'],
 } satisfies Config;
