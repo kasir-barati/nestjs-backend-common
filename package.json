@@ -31,6 +31,10 @@
   },
   "homepage": "https://github.com/kasir-barati/nestjs-backend-common#readme",
   "description": "All the utility functions and common modules I usually use in my NestJS applications will be published and maintained here.",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "peerDependencies": {
     "@nestjs/common": "^11.0.20",
     "@nestjs/core": "^11.0.20",
