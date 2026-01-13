@@ -52,6 +52,17 @@ export class DefineUserInput {
 }
 
 describe('AnyOf', () => {
+  it('should pass when email and phone is provided', async () => {
+    const user = plainToInstance(CreateUserDto, {
+      email: 'email@em.cc',
+      phone: '0123456789',
+    });
+
+    const errors = await validate(user);
+
+    expect(errors).toHaveLength(0);
+  });
+
   it.each([{ email: 'email@em.cc' }, { phone: '0123456789' }])(
     'should pass when email or phone is provided',
     async (data) => {
