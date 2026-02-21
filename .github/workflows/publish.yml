@@ -54,14 +54,26 @@ jobs:
 
           echo "✅ Version validation passed"
 
+      - name: Check if version bump is needed
+        id: should_bump
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          if [[ "$COMMIT_MSG" =~ ^(feat|fix|BREAKING CHANGE): ]] || [[ "$COMMIT_MSG" =~ (BREAKING CHANGE) ]]; then
+            echo "needs_bump=true" >> $GITHUB_OUTPUT
+            echo "✅ Commit requires version bump"
+          else
+            echo "needs_bump=false" >> $GITHUB_OUTPUT
+            echo "ℹ️  Commit does not require version bump (docs/chore/test/etc)"
+          fi
+
       - name: Bump version and push tag
+        if: steps.should_bump.outputs.needs_bump == 'true'
         id: version_bump
         uses: phips28/gh-action-bump-version@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag-prefix: "v"
-          default: "false"
           major-wording: "BREAKING CHANGE,major"
           minor-wording: "feat,feature"
           patch-wording: "fix,patch,bugfix"
