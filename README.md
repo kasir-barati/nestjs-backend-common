@@ -2,7 +2,9 @@
 
 All the utility functions and common modules I usually use in my NestJS applications will be published and maintained here.
 
-📚 **[View Full API Documentation](https://kasir-barati.github.io/nestjs-backend-common/)**
+📚 **[View Full API Documentation](https://kasir-barati.github.io/nestjs-backend-common/)**.
+
+📦 **[View the package on NPM](https://www.npmjs.com/package/nestjs-backend-common)**.
 
 ## Why `nestjs-cls` Is Peer Dependency?
 

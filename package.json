@@ -19,9 +19,11 @@
   },
   "keywords": [
     "npm",
+    "pnpm",
     "common",
     "nestjs",
     "nodejs",
+    "backend",
     "javascript",
     "typescript"
   ],
