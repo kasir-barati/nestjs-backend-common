@@ -17,34 +17,51 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check the current published version
+        id: version_check
         run: |
           LAST_PUBLISHED_VERSION=$(npm view nestjs-backend-common version 2> /dev/null || echo "")
-          PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g')
-          [[ $LAST_PUBLISHED_VERSION == $PACKAGE_VERSION ]] && exit 1 || exit 0
+          PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d ' ')
+
+          echo "last_published=$LAST_PUBLISHED_VERSION" >> $GITHUB_OUTPUT
+          echo "package_version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
+
+          if [[ "$LAST_PUBLISHED_VERSION" == "$PACKAGE_VERSION" ]]; then
+            echo "should_publish=false" >> $GITHUB_OUTPUT
+            echo "::warning::Skipping publish - version $PACKAGE_VERSION is already published on npm"
+          else
+            echo "should_publish=true" >> $GITHUB_OUTPUT
+            echo "Will publish new version: $PACKAGE_VERSION (current: $LAST_PUBLISHED_VERSION)"
+          fi
 
       - uses: pnpm/action-setup@v4
+        if: steps.version_check.outputs.should_publish == 'true'
         name: Install pnpm
         with:
           version: 10
           run_install: false
 
       - name: Install NodeJS
+        if: steps.version_check.outputs.should_publish == 'true'
         uses: actions/setup-node@v4
         with:
-          node-version: 24.13
+          node-version: 24
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org/"
 
       - name: Install Dependencies
+        if: steps.version_check.outputs.should_publish == 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Apply Eslint
+        if: steps.version_check.outputs.should_publish == 'true'
         run: pnpm lint
 
       - name: Run Unit Tests
+        if: steps.version_check.outputs.should_publish == 'true'
         run: pnpm test:unit
 
       - name: Publish Package on npm 📦
+        if: steps.version_check.outputs.should_publish == 'true'
         run: pnpm publish --provenance --access public --no-git-checks
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
