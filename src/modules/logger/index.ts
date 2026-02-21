@@ -6,3 +6,7 @@ export type {
   LogMode,
 } from './logger.interface';
 export { LoggerModule } from './logger.module';
+export {
+  LoggerModuleOptionsFactory,
+  RegisterLoggerModuleOptions,
+} from './logger.module-definition';
