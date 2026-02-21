@@ -61,7 +61,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag-prefix: "v"
-          default: "patch"
+          default: "false"
           major-wording: "BREAKING CHANGE,major"
           minor-wording: "feat,feature"
           patch-wording: "fix,patch,bugfix"
