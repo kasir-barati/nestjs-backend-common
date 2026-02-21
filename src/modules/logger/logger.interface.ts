@@ -1,4 +1,6 @@
+/** @description The mode in which logs are outputted */
 export type LogMode = 'JSON' | 'PLAIN_TEXT';
+/** @description These levels come from [winston](https://github.com/winstonjs/winston?tab=readme-ov-file#logging-levels) */
 export type LogLevel =
   | 'error'
   | 'warn'
