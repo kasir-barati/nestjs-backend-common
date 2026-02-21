@@ -1,3 +1,5 @@
-export * from './correlation-id';
 export * from './decorators';
-export * from './types';
+export * from './graphql-types';
+export * from './interfaces';
+export * from './modules';
+export * from './utils';

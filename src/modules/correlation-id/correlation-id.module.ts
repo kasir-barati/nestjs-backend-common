@@ -3,8 +3,8 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ClsModule } from 'nestjs-cls';
 
 import { CorrelationIdInterceptor } from './correlation-id.interceptor';
+import { CorrelationIdModuleOptions } from './correlation-id.interface';
 import { CorrelationIdService } from './correlation-id.service';
-import { CorrelationIdModuleOptions } from './correlation-id.type';
 
 @Module({})
 export class CorrelationIdModule {

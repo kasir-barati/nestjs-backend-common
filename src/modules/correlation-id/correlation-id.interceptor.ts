@@ -5,7 +5,6 @@ import {
   CallHandler,
   ExecutionContext,
   Injectable,
-  Logger,
   NestInterceptor,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
@@ -13,7 +12,7 @@ import { randomUUID } from 'crypto';
 import { ClsService } from 'nestjs-cls';
 import { type Observable, tap } from 'rxjs';
 
-import { CommonExecutionContext } from '../types';
+import { CommonExecutionContext } from '../../interfaces';
 import {
   CORRELATION_ID_CLS_KEY,
   CORRELATION_ID_HEADER_NAME,
@@ -21,8 +20,6 @@ import {
 
 @Injectable()
 export class CorrelationIdInterceptor implements NestInterceptor {
-  private logger = new Logger(CorrelationIdInterceptor.name);
-
   constructor(private readonly clsService: ClsService) {}
 
   intercept(
