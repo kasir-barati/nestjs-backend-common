@@ -8,6 +8,7 @@ on:
 permissions:
   # https://stackoverflow.com/a/72183279/8784518
   id-token: write
+  contents: write
 
 jobs:
   build:
@@ -15,6 +16,54 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate no manual version bumps
+        run: |
+          # Get current package.json version
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+
+          # Get last tag, handle case when no tags exist
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [[ -z "$LAST_TAG" ]]; then
+            echo "ℹ️  No tags found - assuming first run, skipping validation"
+            exit 0
+          fi
+
+          LAST_VERSION=${LAST_TAG#v}
+
+          # Get last commit message
+          LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
+
+          # Check if version changed manually (not by bot)
+          if [[ "$CURRENT_VERSION" != "$LAST_VERSION" ]] && [[ ! "$LAST_COMMIT_MSG" =~ ^chore\(release\): ]]; then
+            echo "❌ ERROR: package.json version was manually changed!"
+            echo "Current version: $CURRENT_VERSION"
+            echo "Last tagged version: $LAST_VERSION"
+            echo ""
+            echo "Manual version bumps are not allowed. Please use conventional commits:"
+            echo "  - fix: for bug fixes (patch bump)"
+            echo "  - feat: for new features (minor bump)"
+            echo "  - BREAKING CHANGE: for breaking changes (major bump)"
+            echo ""
+            echo "Revert the version change and use proper commit messages."
+            exit 1
+          fi
+
+          echo "✅ Version validation passed"
+
+      - name: Bump version and push tag
+        id: version_bump
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: false
+          release_branches: main
+          create_annotated_tag: true
+          tag_prefix: "v"
+          custom_release_rules: "feat:minor,fix:patch,docs:patch,chore:patch,refactor:patch"
 
       - name: Check the current published version
         id: version_check
