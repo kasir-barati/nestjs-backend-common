@@ -2,6 +2,10 @@
 
 All the utility functions and common modules I usually use in my NestJS applications will be published and maintained here.
 
+> [!NOTE]
+>
+> Right now you might need to install `@nestjs/graphql` even though your developing a RESTful API. If that is the case [open an issue](https://github.com/kasir-barati/nestjs-backend-common/issues) with this title: "split package or modularize peer deps" (search for one first though), we can discuss how should we split this library into smaller libraries.
+
 📚 **[View Full API Documentation](https://kasir-barati.github.io/nestjs-backend-common/)**.
 
 📦 **[View the package on NPM](https://www.npmjs.com/package/nestjs-backend-common)**.
