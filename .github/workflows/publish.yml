@@ -56,14 +56,20 @@ jobs:
 
       - name: Bump version and push tag
         id: version_bump
-        uses: mathieudutour/github-tag-action@v6.2
+        uses: phips28/gh-action-bump-version@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          default_bump: false
-          release_branches: main
-          create_annotated_tag: true
-          tag_prefix: "v"
-          custom_release_rules: "feat:minor,fix:patch,docs:patch,chore:patch,refactor:patch"
+          tag-prefix: "v"
+          default: "patch"
+          major-wording: "BREAKING CHANGE,major"
+          minor-wording: "feat,feature"
+          patch-wording: "fix,patch,bugfix"
+          rc-wording: ""
+          skip-tag: "false"
+          skip-commit: "false"
+          skip-push: "false"
+          commit-message: "chore(release): bump version to {{version}} [skip ci]"
 
       - name: Check the current published version
         id: version_check
