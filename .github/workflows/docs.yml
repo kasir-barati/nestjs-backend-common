@@ -31,7 +31,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Generate Documentation
-        run: pnpm docs
+        run: pnpm exec typedoc src/index.ts
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
