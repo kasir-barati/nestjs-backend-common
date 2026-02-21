@@ -38,13 +38,23 @@ jobs:
         run: pnpm exec typedoc src/index.ts
 
       - name: Commit Documentation
+        id: commit_docs
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add docs/
-          git diff --staged --quiet || git commit -m "chore: update documentation"
+
+          if [[ -n $(git status --porcelain docs/) ]]; then
+            echo "Documentation changes detected, committing..."
+            git commit -m "chore: update documentation"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "No documentation changes detected, skipping commit"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Push Changes
+        if: steps.commit_docs.outputs.has_changes == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
