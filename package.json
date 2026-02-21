@@ -9,6 +9,7 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "format": "prettier -w -u .",
+    "docs": "typedoc src/index.ts",
     "prepublish": "npm run build",
     "prepare": "husky"
   },
@@ -68,6 +69,7 @@
     "prettier": "^3.5.3",
     "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
+    "typedoc": "^0.28.17",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.30.1"
   }

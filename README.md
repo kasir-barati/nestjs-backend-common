@@ -2,17 +2,7 @@
 
 All the utility functions and common modules I usually use in my NestJS applications will be published and maintained here.
 
-| Module                | description                                                      |
-| --------------------- | ---------------------------------------------------------------- |
-| `CorrelationIdModule` | Adds a correlation ID to each request (`RPC`, `GraphQL`, `HTTP`) |
-
----
-
-| Decorator | Description                                                                                     |
-| --------- | ----------------------------------------------------------------------------------------------- |
-| `AnyOf`   | Client has to at least send of the two fields, they can of course provide both.                 |
-| `GetIp`   | Returns the IP.                                                                                 |
-| `OneOf`   | Throws an error if more than one of the properties are present in the request body/querystring. |
+📚 **[View Full API Documentation](https://kasir-barati.github.io/nestjs-backend-common/)**
 
 ## Why `nestjs-cls` Is Peer Dependency?
 
