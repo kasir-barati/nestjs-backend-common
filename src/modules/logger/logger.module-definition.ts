@@ -4,11 +4,10 @@ import {
   LogLevel,
 } from '@nestjs/common';
 
+import { CommonModuleOptions } from '../../interfaces';
 import { LogMode } from './logger.interface';
 
-export interface ExtraLoggerModuleOptions {
-  global?: boolean;
-}
+export type ExtraLoggerModuleOptions = CommonModuleOptions;
 export interface LoggerModuleOptions {
   logMode: LogMode;
   logLevel: LogLevel;

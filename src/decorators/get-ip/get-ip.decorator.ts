@@ -19,4 +19,8 @@ export function getIpFactory(
   }
 }
 
+/**
+ * @description
+ * Returns the IP address of the client making the request. Learn how to use it by reading the unit tests.
+ */
 export const GetIp = createParamDecorator(getIpFactory);

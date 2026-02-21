@@ -3,7 +3,7 @@ import { IsDefined, ValidateIf } from 'class-validator';
 
 /**
  * @description
- * Do not annotate the fields with `@IsOptional` since it will not validate them at all.
+ * Do not annotate the fields with `@IsOptional` since it will not validate them at all. Learn how to use it by reading the unit tests.
  */
 export function AnyOf(properties: string[]) {
   return function (target: any) {

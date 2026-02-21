@@ -7,9 +7,11 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
+import { isNil } from '../../utils';
+
 /**
  * @description
- * Throws an error if more than one of the properties are present in the request body/querystring.
+ * Throws an error if more than one of the properties are present in the request body/querystring. Learn how to use it by reading the unit tests.
  */
 export function OneOf(properties: string[]) {
   return function (target: any) {
@@ -92,8 +94,4 @@ class OneOfCheckerConstraint implements ValidatorConstraintInterface {
 
     return `Do not send ${props} at the same time!`;
   }
-}
-
-function isNil(value: unknown) {
-  return value === null || value === undefined;
 }

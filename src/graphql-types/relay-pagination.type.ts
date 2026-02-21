@@ -4,12 +4,16 @@ import { Field, ObjectType } from '@nestjs/graphql';
 type ClassRef<T> = Type<T>;
 
 export interface Edge<TNode> {
+  /** @description An opaque cursor for pagination */
   cursor: string;
+  /** @description The item at the end of the edge */
   node: TNode;
 }
 
 export interface Connection<TEdge> {
+  /** @description A list of edges in the connection */
   edges: TEdge[];
+  /** @description Information about the current page of results */
   pageInfo: PageInfo;
 }
 

@@ -1,7 +1,3 @@
-export interface CorrelationIdModuleOptions {
-  /**
-   * @default false
-   * @description Register the module globally
-   */
-  isGlobal?: boolean;
-}
+import { CommonModuleOptions } from '../../interfaces';
+
+export type CorrelationIdModuleOptions = CommonModuleOptions;

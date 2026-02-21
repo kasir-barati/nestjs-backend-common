@@ -14,3 +14,6 @@ export type RecursivePartial<T> = Partial<{
       ? Array<RecursivePartial<T[key][number]>>
       : RecursivePartial<T[key]> | T[key];
 }>;
+export interface CommonModuleOptions {
+  global?: boolean;
+}

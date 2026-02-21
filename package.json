@@ -1,6 +1,6 @@
 {
   "name": "nestjs-backend-common",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "main": "dist/src/index",
   "types": "dist/src/index",
   "scripts": {
@@ -39,10 +39,11 @@
     "registry": "https://registry.npmjs.org/"
   },
   "peerDependencies": {
-    "@nestjs/common": "^11.0.20",
-    "@nestjs/core": "^11.0.20",
-    "nestjs-cls": "^5.4.3",
-    "reflect-metadata": "^0.2.2"
+    "@nestjs/common": "^11",
+    "@nestjs/core": "^11",
+    "nestjs-cls": "^6",
+    "reflect-metadata": "^0.2",
+    "@nestjs/graphql": "^13"
   },
   "dependencies": {
     "@nestjs/graphql": "^13.2.4",
