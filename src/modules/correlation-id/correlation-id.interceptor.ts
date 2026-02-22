@@ -73,6 +73,38 @@ export class CorrelationIdInterceptor implements NestInterceptor {
       this.clsService.set(CORRELATION_ID_CLS_KEY, correlationId);
     }
 
+    switch (executionContext.getType<CommonExecutionContext>()) {
+      case 'http': {
+        const req: Request = executionContext
+          .switchToHttp()
+          .getRequest();
+
+        this.setHttpCorrelationIdHeader(req, correlationId);
+
+        break;
+      }
+      case 'graphql': {
+        const ctx = GqlExecutionContext.create(executionContext);
+        const context = ctx.getContext();
+
+        this.setGraphqlCorrelationIdRequestHeader(
+          context,
+          correlationId,
+        );
+
+        break;
+      }
+      case 'rpc': {
+        const metadata = executionContext
+          .switchToRpc()
+          .getContext<Metadata>();
+
+        metadata.set(CORRELATION_ID_HEADER_NAME, correlationId);
+
+        break;
+      }
+    }
+
     return next.handle().pipe(
       tap(() => {
         switch (executionContext.getType<CommonExecutionContext>()) {
@@ -156,6 +188,29 @@ export class CorrelationIdInterceptor implements NestInterceptor {
         CORRELATION_ID_HEADER_NAME,
         correlationId,
       );
+      return;
+    }
+  }
+
+  private setHttpCorrelationIdHeader(
+    req: Request,
+    correlationId: string,
+  ) {
+    req.headers[CORRELATION_ID_HEADER_NAME] = correlationId;
+  }
+
+  private setGraphqlCorrelationIdRequestHeader(
+    context: any,
+    correlationId: string,
+  ) {
+    if (context.req?.headers) {
+      context.req.headers[CORRELATION_ID_HEADER_NAME] = correlationId;
+      return;
+    }
+
+    if (context.req?.extra?.request?.headers) {
+      context.req.extra.request.headers[CORRELATION_ID_HEADER_NAME] =
+        correlationId;
       return;
     }
   }

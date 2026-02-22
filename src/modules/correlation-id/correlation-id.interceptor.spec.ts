@@ -1,5 +1,6 @@
 const mockedResponse = { setHeader: jest.fn() };
 
+import { GqlExecutionContext } from '@nestjs/graphql';
 import { Test } from '@nestjs/testing';
 import { ClsModule, ClsService } from 'nestjs-cls';
 import { firstValueFrom, of } from 'rxjs';
@@ -55,6 +56,7 @@ describe('CorrelationIdInterceptor', () => {
         switchToRpc: jest.fn().mockReturnValue({
           getContext: jest.fn().mockReturnValue({
             get: jest.fn().mockReturnValue(['correlation uuid']),
+            set: jest.fn(),
           }),
         }),
       };
@@ -98,6 +100,32 @@ describe('CorrelationIdInterceptor', () => {
     );
   });
 
+  it('should attach correlation ID to the request header when request type is http', async () => {
+    const mockedRequest = { headers: {} } as any;
+    const mockedResponseHeaders = { headers: { append: jest.fn() } };
+    const mockedResponse = jest
+      .fn()
+      .mockReturnValue(mockedResponseHeaders);
+    const mockedExecutionContext: any = {
+      getType: jest.fn(() => 'http'),
+      switchToHttp: jest.fn().mockReturnValue({
+        getRequest: jest.fn().mockReturnValue(mockedRequest),
+        getResponse: mockedResponse,
+      }),
+    };
+    const mockedNext = {
+      handle: jest.fn(() => of({})),
+    };
+
+    await firstValueFrom(
+      uut.intercept(mockedExecutionContext, mockedNext),
+    );
+
+    expect(
+      mockedRequest.headers[CORRELATION_ID_HEADER_NAME],
+    ).toBeString();
+  });
+
   it('should attach correlation ID to the response header when request type is graphql', async () => {
     const mockedExecutionContext: any = {
       getType: jest.fn(() => 'graphql'),
@@ -117,6 +145,35 @@ describe('CorrelationIdInterceptor', () => {
       CORRELATION_ID_HEADER_NAME,
       expect.any(String),
     );
+  });
+
+  it('should attach correlation ID to the request header when request type is graphql', async () => {
+    const mockedGraphqlContext = {
+      req: { headers: {}, res: mockedResponse },
+    } as any;
+    jest.mocked(GqlExecutionContext.create).mockReturnValue({
+      getContext: jest.fn().mockReturnValue(mockedGraphqlContext),
+      getInfo: jest.fn().mockReturnValue({
+        operation: { operation: 'query' },
+      }),
+    } as any);
+    const mockedExecutionContext: any = {
+      getType: jest.fn(() => 'graphql'),
+      switchToHttp: jest.fn().mockReturnValue({
+        getRequest: jest.fn().mockReturnValue({ headers: {} }),
+      }),
+    };
+    const mockedNext = {
+      handle: jest.fn(() => of({})),
+    };
+
+    await firstValueFrom(
+      uut.intercept(mockedExecutionContext, mockedNext),
+    );
+
+    expect(
+      mockedGraphqlContext.req.headers[CORRELATION_ID_HEADER_NAME],
+    ).toBeString();
   });
 
   it('should attach correlation ID to the response metadata when request type is rpc', async () => {
