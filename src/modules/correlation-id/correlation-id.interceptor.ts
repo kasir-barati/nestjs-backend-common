@@ -1,4 +1,5 @@
 import type { Metadata } from '@grpc/grpc-js';
+import type { ConsumeMessage } from 'amqplib';
 import type { Request } from 'express';
 
 import {
@@ -58,6 +59,32 @@ export class CorrelationIdInterceptor implements NestInterceptor {
         correlationId = req
           .getContext<Metadata>()
           .get(CORRELATION_ID_HEADER_NAME)[0] as string;
+
+        break;
+      }
+      case 'ws': {
+        // TODO: implement correlation id for WebSocket and Socket.IO
+        // const client = executionContext.switchToWs().getClient()
+
+        // if (isSocketIo(client)) {
+        //   // Socket.IO: headers exist at any time on client.handshake.headers
+        //   const fromHeader = client.handshake.headers[headerKey] as string | undefined;
+        //   correlationId = client.data.correlationId ?? fromHeader ?? randomUUID();
+        //   client.data.correlationId = correlationId; // persist
+        // } else if (isWs(client)) {
+        //   // ws: headers are only available on the initial upgrade request.
+        //   // You should set correlationId during handleConnection (see below).
+        //   correlationId = client.correlationId ?? randomUUID();
+        //   client.correlationId = correlationId; // persist
+        // }
+
+        break;
+      }
+      case 'rmq': {
+        const message: ConsumeMessage = executionContext.getArgs()[0];
+
+        correlationId =
+          message?.properties?.headers?.[CORRELATION_ID_HEADER_NAME];
 
         break;
       }

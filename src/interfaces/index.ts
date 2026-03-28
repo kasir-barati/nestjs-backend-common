@@ -1,6 +1,6 @@
 import { ContextType } from '@nestjs/common';
 
-export type CommonExecutionContext = 'graphql' | ContextType;
+export type CommonExecutionContext = 'graphql' | 'rmq' | ContextType;
 export type NodeEnv = 'development' | 'production' | 'test';
 export interface Class<T> {
   new (...args: any[]): T;
