@@ -1,3 +1,4 @@
+export * from './create-swagger-configuration.util';
 export * from './is-nil.util';
 export * from './retry-async.util';
 export * from './sleep.util';
