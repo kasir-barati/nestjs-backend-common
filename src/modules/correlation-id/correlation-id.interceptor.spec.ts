@@ -75,15 +75,12 @@ describe('CorrelationIdInterceptor', () => {
   );
 
   it('should attach correlation ID to the response header when request type is http', async () => {
-    const mockedResponseHeaders = { headers: { append: jest.fn() } };
-    const mockedResponse = jest
-      .fn()
-      .mockReturnValue(mockedResponseHeaders);
+    const mockedResponseObj = { setHeader: jest.fn() };
     const mockedExecutionContext: any = {
       getType: jest.fn(() => 'http'),
       switchToHttp: jest.fn().mockReturnValue({
         getRequest: jest.fn().mockReturnValue({ headers: {} }),
-        getResponse: mockedResponse,
+        getResponse: jest.fn().mockReturnValue(mockedResponseObj),
       }),
     };
     const mockedNext = {
@@ -94,7 +91,7 @@ describe('CorrelationIdInterceptor', () => {
       uut.intercept(mockedExecutionContext, mockedNext),
     );
 
-    expect(mockedResponseHeaders.headers.append).toHaveBeenCalledWith(
+    expect(mockedResponseObj.setHeader).toHaveBeenCalledWith(
       CORRELATION_ID_HEADER_NAME,
       expect.any(String),
     );
@@ -102,15 +99,12 @@ describe('CorrelationIdInterceptor', () => {
 
   it('should attach correlation ID to the request header when request type is http', async () => {
     const mockedRequest = { headers: {} } as any;
-    const mockedResponseHeaders = { headers: { append: jest.fn() } };
-    const mockedResponse = jest
-      .fn()
-      .mockReturnValue(mockedResponseHeaders);
+    const mockedResponseObj = { setHeader: jest.fn() };
     const mockedExecutionContext: any = {
       getType: jest.fn(() => 'http'),
       switchToHttp: jest.fn().mockReturnValue({
         getRequest: jest.fn().mockReturnValue(mockedRequest),
-        getResponse: mockedResponse,
+        getResponse: jest.fn().mockReturnValue(mockedResponseObj),
       }),
     };
     const mockedNext = {

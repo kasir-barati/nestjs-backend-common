@@ -1,6 +1,6 @@
 import type { Metadata } from '@grpc/grpc-js';
 import type { ConsumeMessage } from 'amqplib';
-import type { Request } from 'express';
+import type { Request, Response } from 'express';
 
 import {
   CallHandler,
@@ -140,10 +140,7 @@ export class CorrelationIdInterceptor implements NestInterceptor {
               .switchToHttp()
               .getResponse();
 
-            res.headers.append(
-              CORRELATION_ID_HEADER_NAME,
-              correlationId,
-            );
+            res.setHeader(CORRELATION_ID_HEADER_NAME, correlationId);
 
             break;
           }
