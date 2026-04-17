@@ -1,5 +1,6 @@
 import { ContextType } from '@nestjs/common';
 
+export * from './retry.interface';
 export type CommonExecutionContext = 'graphql' | 'rmq' | ContextType;
 export type NodeEnv = 'development' | 'production' | 'test';
 export interface Class<T> {
