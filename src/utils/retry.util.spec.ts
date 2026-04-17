@@ -7,10 +7,10 @@ describe(retry.name, () => {
   });
 
   describe('successful execution', () => {
-    it('should return result on first successful call', async () => {
+    it('should return result on first successful call', () => {
       const mockFunc = jest.fn().mockReturnValue('success');
 
-      const [error, result] = await retry(mockFunc);
+      const [error, result] = retry(mockFunc);
 
       expect(error).toBeNull();
       expect(result).toBe('success');
@@ -24,7 +24,7 @@ describe(retry.name, () => {
       );
     });
 
-    it('should return complex object result', async () => {
+    it('should return complex object result', () => {
       const expectedResult = {
         id: 1,
         name: 'test',
@@ -32,24 +32,24 @@ describe(retry.name, () => {
       };
       const mockFunc = jest.fn().mockReturnValue(expectedResult);
 
-      const [error, result] = await retry(mockFunc);
+      const [error, result] = retry(mockFunc);
 
       expect(error).toBeNull();
       expect(result).toEqual(expectedResult);
     });
 
-    it('should work with array results', async () => {
+    it('should work with array results', () => {
       const expectedResult = [1, 2, 3, 4, 5];
       const mockFunc = jest.fn().mockReturnValue(expectedResult);
 
-      const [error, result] = await retry(mockFunc);
+      const [error, result] = retry(mockFunc);
 
       expect(error).toBeNull();
       expect(result).toEqual(expectedResult);
     });
 
-    it('should handle JSON.parse with valid JSON', async () => {
-      const [error, result] = await retry(
+    it('should handle JSON.parse with valid JSON', () => {
+      const [error, result] = retry(
         () => JSON.parse('{"key": "value"}'),
         { retry: 0 },
       );
@@ -60,8 +60,8 @@ describe(retry.name, () => {
   });
 
   describe('sync error handling', () => {
-    it('should catch sync throw and return error tuple', async () => {
-      const [error, result] = await retry(
+    it('should catch sync throw and return error tuple', () => {
+      const [error, result] = retry(
         () => JSON.parse('invalid json'),
         { retry: 0 },
       );
@@ -70,9 +70,9 @@ describe(retry.name, () => {
       expect(result).toBeNull();
     });
 
-    it('should catch explicit throw and return error tuple', async () => {
+    it('should catch explicit throw and return error tuple', () => {
       const testError = new Error('sync failure');
-      const [error, result] = await retry(
+      const [error, result] = retry(
         () => {
           throw testError;
         },
@@ -85,7 +85,7 @@ describe(retry.name, () => {
   });
 
   describe('retry mechanism', () => {
-    it('should retry on failure and succeed on second attempt', async () => {
+    it('should retry on failure and succeed on second attempt', () => {
       let callCount = 0;
       const mockFunc = jest.fn(() => {
         callCount++;
@@ -95,14 +95,14 @@ describe(retry.name, () => {
         return 'success';
       });
 
-      const [error, result] = await retry(mockFunc, { retry: 1 });
+      const [error, result] = retry(mockFunc, { retry: 1 });
 
       expect(error).toBeNull();
       expect(result).toBe('success');
       expect(mockFunc).toHaveBeenCalledTimes(2);
     });
 
-    it('should retry multiple times until success', async () => {
+    it('should retry multiple times until success', () => {
       let callCount = 0;
       const mockFunc = jest.fn(() => {
         callCount++;
@@ -112,14 +112,14 @@ describe(retry.name, () => {
         return 'success';
       });
 
-      const [error, result] = await retry(mockFunc, { retry: 5 });
+      const [error, result] = retry(mockFunc, { retry: 5 });
 
       expect(error).toBeNull();
       expect(result).toBe('success');
       expect(mockFunc).toHaveBeenCalledTimes(4);
     });
 
-    it('should pass correct retry status on each attempt', async () => {
+    it('should pass correct retry status on each attempt', () => {
       let callCount = 0;
       const mockFunc = jest.fn(() => {
         callCount++;
@@ -129,7 +129,7 @@ describe(retry.name, () => {
         return 'success';
       });
 
-      await retry(mockFunc, { retry: 3 });
+      retry(mockFunc, { retry: 3 });
 
       expect(mockFunc).toHaveBeenNthCalledWith(
         1,
@@ -153,56 +153,36 @@ describe(retry.name, () => {
         }),
       );
     });
-
-    it('should track duration correctly', async () => {
-      let callCount = 0;
-      const mockFunc = jest.fn(() => {
-        callCount++;
-        if (callCount === 1) {
-          throw new Error('Failure');
-        }
-        return 'success';
-      });
-
-      await retry(mockFunc, { retry: 1, delay: 10 });
-
-      const firstCallDuration = (mockFunc.mock.calls as any)[0][0]
-        .duration;
-      const secondCallDuration = (mockFunc.mock.calls as any)[1][0]
-        .duration;
-      expect(firstCallDuration).toBeGreaterThanOrEqual(0);
-      expect(secondCallDuration).toBeGreaterThan(firstCallDuration);
-    });
   });
 
   describe('maximum retry limit', () => {
-    it('should return error when retry limit is reached', async () => {
+    it('should return error when retry limit is reached', () => {
       const testError = new Error('Persistent failure');
       const mockFunc = jest.fn(() => {
         throw testError;
       });
 
-      const [error, result] = await retry(mockFunc, { retry: 2 });
+      const [error, result] = retry(mockFunc, { retry: 2 });
 
       expect(error).toBe(testError);
       expect(result).toBeNull();
       expect(mockFunc).toHaveBeenCalledTimes(3); // Initial call + 2 retries
     });
 
-    it('should not retry when retry is set to 0', async () => {
+    it('should not retry when retry is set to 0', () => {
       const testError = new Error('Failure');
       const mockFunc = jest.fn(() => {
         throw testError;
       });
 
-      const [error, result] = await retry(mockFunc, { retry: 0 });
+      const [error, result] = retry(mockFunc, { retry: 0 });
 
       expect(error).toBe(testError);
       expect(result).toBeNull();
       expect(mockFunc).toHaveBeenCalledTimes(1);
     });
 
-    it('should use infinite retries by default', async () => {
+    it('should use infinite retries by default', () => {
       let callCount = 0;
       const mockFunc = jest.fn(() => {
         callCount++;
@@ -212,7 +192,7 @@ describe(retry.name, () => {
         return 'success';
       });
 
-      const [error, result] = await retry(mockFunc);
+      const [error, result] = retry(mockFunc);
 
       expect(error).toBeNull();
       expect(result).toBe('success');
@@ -221,7 +201,7 @@ describe(retry.name, () => {
   });
 
   describe('retry callback function', () => {
-    it('should use callback function to determine if retry should continue', async () => {
+    it('should use callback function to determine if retry should continue', () => {
       let callCount = 0;
       const mockFunc = jest.fn(() => {
         callCount++;
@@ -232,7 +212,7 @@ describe(retry.name, () => {
       });
       const retryCallback = jest.fn().mockReturnValue(true);
 
-      const [error, result] = await retry(mockFunc, {
+      const [error, result] = retry(mockFunc, {
         retry: retryCallback,
       });
 
@@ -248,7 +228,7 @@ describe(retry.name, () => {
       );
     });
 
-    it('should stop retrying when callback returns false', async () => {
+    it('should stop retrying when callback returns false', () => {
       const testError = new Error('Failure');
       const mockFunc = jest.fn(() => {
         throw testError;
@@ -258,7 +238,7 @@ describe(retry.name, () => {
         .mockReturnValueOnce(true)
         .mockReturnValueOnce(false);
 
-      const [error, result] = await retry(mockFunc, {
+      const [error, result] = retry(mockFunc, {
         retry: retryCallback,
       });
 
@@ -268,7 +248,7 @@ describe(retry.name, () => {
       expect(retryCallback).toHaveBeenCalledTimes(2);
     });
 
-    it('should allow conditional retry based on error type', async () => {
+    it('should allow conditional retry based on error type', () => {
       const retriableError = new Error('Retriable');
       const nonRetriableError = new Error('Non-retriable');
       let callCount = 0;
@@ -283,7 +263,7 @@ describe(retry.name, () => {
         return (status.error as Error).message === 'Retriable';
       });
 
-      const [error, result] = await retry(mockFunc, {
+      const [error, result] = retry(mockFunc, {
         retry: retryCallback,
       });
 
@@ -293,134 +273,15 @@ describe(retry.name, () => {
     });
   });
 
-  describe('delay mechanism', () => {
-    beforeEach(() => {
-      jest.useFakeTimers();
-    });
-
-    afterEach(() => {
-      jest.useRealTimers();
-    });
-
-    it('should delay before retry with fixed delay', async () => {
-      let callCount = 0;
-      const mockFunc = jest.fn(() => {
-        callCount++;
-        if (callCount === 1) {
-          throw new Error('Failure');
-        }
-        return 'success';
-      });
-      const promise = retry(mockFunc, { retry: 1, delay: 1000 });
-      await jest.advanceTimersByTimeAsync(1000);
-
-      const [error, result] = await promise;
-
-      expect(error).toBeNull();
-      expect(result).toBe('success');
-      expect(mockFunc).toHaveBeenCalledTimes(2);
-    });
-
-    it('should not delay when delay is negative', async () => {
-      let callCount = 0;
-      const mockFunc = jest.fn(() => {
-        callCount++;
-        if (callCount === 1) {
-          throw new Error('Failure');
-        }
-        return 'success';
-      });
-      const promise = retry(mockFunc, { retry: 1, delay: -1 });
-
-      const [error, result] = await promise;
-
-      expect(error).toBeNull();
-      expect(result).toBe('success');
-      expect(mockFunc).toHaveBeenCalledTimes(2);
-    });
-
-    it('should not delay by default', async () => {
-      let callCount = 0;
-      const mockFunc = jest.fn(() => {
-        callCount++;
-        if (callCount === 1) {
-          throw new Error('Failure');
-        }
-        return 'success';
-      });
-      const promise = retry(mockFunc, { retry: 1 });
-
-      const [error, result] = await promise;
-
-      expect(error).toBeNull();
-      expect(result).toBe('success');
-    });
-
-    it('should use delay callback for dynamic delays', async () => {
-      let callCount = 0;
-      const mockFunc = jest.fn(() => {
-        callCount++;
-        if (callCount <= 2) {
-          throw new Error(`Failure ${callCount}`);
-        }
-        return 'success';
-      });
-      const delayCallback = jest.fn((status) => status.index * 100);
-
-      const promise = retry(mockFunc, {
-        retry: 3,
-        delay: delayCallback,
-      });
-      // First retry delay (index 1): 100ms
-      await jest.advanceTimersByTimeAsync(100);
-      // Second retry delay (index 2): 200ms
-      await jest.advanceTimersByTimeAsync(200);
-
-      const [error, result] = await promise;
-      expect(error).toBeNull();
-      expect(result).toBe('success');
-      expect(delayCallback).toHaveBeenCalledTimes(2);
-      expect(mockFunc).toHaveBeenCalledTimes(3);
-    });
-
-    it('should implement exponential backoff with delay callback', async () => {
-      let callCount = 0;
-      const mockFunc = jest.fn(() => {
-        callCount++;
-        if (callCount <= 3) {
-          throw new Error(`Failure ${callCount}`);
-        }
-        return 'success';
-      });
-      const exponentialBackoff = jest.fn(
-        (status) => Math.pow(2, status.index) * 100,
-      );
-
-      const promise = retry(mockFunc, {
-        retry: 5,
-        delay: exponentialBackoff,
-      });
-      // Delays: 2^1*100=200, 2^2*100=400, 2^3*100=800
-      await jest.advanceTimersByTimeAsync(200);
-      await jest.advanceTimersByTimeAsync(400);
-      await jest.advanceTimersByTimeAsync(800);
-
-      const [error, result] = await promise;
-      expect(error).toBeNull();
-      expect(result).toBe('success');
-      expect(exponentialBackoff).toHaveBeenCalledTimes(3);
-    });
-  });
-
   describe('error callback', () => {
-    it('should call error callback on each failure', async () => {
+    it('should call error callback on each failure', () => {
       const testError = new Error('Test error');
       const mockFunc = jest.fn(() => {
         throw testError;
       });
       const errorCallback = jest.fn();
 
-      await retry(mockFunc, { retry: 2, error: errorCallback });
+      retry(mockFunc, { retry: 2, error: errorCallback });
 
       expect(errorCallback).toHaveBeenCalledTimes(3);
       expect(errorCallback).toHaveBeenCalledWith(
@@ -432,16 +293,16 @@ describe(retry.name, () => {
       );
     });
 
-    it('should not call error callback on success', async () => {
+    it('should not call error callback on success', () => {
       const mockFunc = jest.fn().mockReturnValue('success');
       const errorCallback = jest.fn();
 
-      await retry(mockFunc, { error: errorCallback });
+      retry(mockFunc, { error: errorCallback });
 
       expect(errorCallback).not.toHaveBeenCalled();
     });
 
-    it('should call error callback before retry decision', async () => {
+    it('should call error callback before retry decision', () => {
       let callCount = 0;
       const mockFunc = jest.fn(() => {
         callCount++;
@@ -453,7 +314,7 @@ describe(retry.name, () => {
       const errorCallback = jest.fn();
       const retryCallback = jest.fn().mockReturnValue(true);
 
-      await retry(mockFunc, {
+      retry(mockFunc, {
         retry: retryCallback,
         error: errorCallback,
       });
@@ -462,14 +323,14 @@ describe(retry.name, () => {
       expect(retryCallback).toHaveBeenCalledTimes(1);
     });
 
-    it('should provide error details to error callback', async () => {
+    it('should provide error details to error callback', () => {
       const testError = new Error('Custom error message');
       const mockFunc = jest.fn(() => {
         throw testError;
       });
       const errorCallback = jest.fn();
 
-      await retry(mockFunc, { retry: 0, error: errorCallback });
+      retry(mockFunc, { retry: 0, error: errorCallback });
 
       expect(errorCallback).toHaveBeenCalledWith({
         index: 0,
@@ -480,73 +341,54 @@ describe(retry.name, () => {
   });
 
   describe('edge cases', () => {
-    it('should handle non-Error thrown values', async () => {
+    it('should handle non-Error thrown values', () => {
       const mockFunc = jest.fn(() => {
         throw 'string error';
       });
 
-      const [error, result] = await retry(mockFunc, { retry: 0 });
+      const [error, result] = retry(mockFunc, { retry: 0 });
 
       expect(error).toBe('string error');
       expect(result).toBeNull();
     });
 
-    it('should handle undefined options', async () => {
+    it('should handle undefined options', () => {
       const mockFunc = jest.fn().mockReturnValue('success');
 
-      const [error, result] = await retry(mockFunc);
+      const [error, result] = retry(mockFunc);
 
       expect(error).toBeNull();
       expect(result).toBe('success');
     });
 
-    it('should handle empty options object', async () => {
+    it('should handle empty options object', () => {
       const mockFunc = jest.fn().mockReturnValue('success');
 
-      const [error, result] = await retry(mockFunc, {});
+      const [error, result] = retry(mockFunc, {});
 
       expect(error).toBeNull();
       expect(result).toBe('success');
     });
 
-    it('should handle delay of 0', async () => {
-      let callCount = 0;
-      const mockFunc = jest.fn(() => {
-        callCount++;
-        if (callCount === 1) {
-          throw new Error('Failure');
-        }
-        return 'success';
-      });
-
-      const [error, result] = await retry(mockFunc, {
-        retry: 1,
-        delay: 0,
-      });
-
-      expect(error).toBeNull();
-      expect(result).toBe('success');
-    });
-
-    it('should handle function that returns null', async () => {
+    it('should handle function that returns null', () => {
       const mockFunc = jest.fn().mockReturnValue(null);
 
-      const [error, result] = await retry(mockFunc);
+      const [error, result] = retry(mockFunc);
 
       expect(error).toBeNull();
       expect(result).toBeNull();
     });
 
-    it('should handle function that returns undefined', async () => {
+    it('should handle function that returns undefined', () => {
       const mockFunc = jest.fn().mockReturnValue(undefined);
 
-      const [error, result] = await retry(mockFunc);
+      const [error, result] = retry(mockFunc);
 
       expect(error).toBeNull();
       expect(result).toBeUndefined();
     });
 
-    it('should handle callback function that accesses retry status', async () => {
+    it('should handle callback function that accesses retry status', () => {
       const statuses: any[] = [];
       const mockFunc = jest.fn((status) => {
         statuses.push({ ...status });
@@ -556,7 +398,7 @@ describe(retry.name, () => {
         return 'success';
       });
 
-      await retry(mockFunc, { retry: 5 });
+      retry(mockFunc, { retry: 5 });
 
       expect(statuses).toHaveLength(3);
       expect(statuses[0].index).toBe(0);
@@ -566,15 +408,7 @@ describe(retry.name, () => {
   });
 
   describe('combined options', () => {
-    beforeEach(() => {
-      jest.useFakeTimers();
-    });
-
-    afterEach(() => {
-      jest.useRealTimers();
-    });
-
-    it('should work with all options combined', async () => {
+    it('should work with retry callback and error callback combined', () => {
       let callCount = 0;
       const mockFunc = jest.fn(() => {
         callCount++;
@@ -585,29 +419,21 @@ describe(retry.name, () => {
       });
 
       const retryCallback = jest.fn().mockReturnValue(true);
-      const delayCallback = jest.fn().mockReturnValue(100);
       const errorCallback = jest.fn();
 
-      const promise = retry(mockFunc, {
+      const [error, result] = retry(mockFunc, {
         retry: retryCallback,
-        delay: delayCallback,
         error: errorCallback,
       });
-
-      await jest.advanceTimersByTimeAsync(100);
-      await jest.advanceTimersByTimeAsync(100);
-
-      const [error, result] = await promise;
 
       expect(error).toBeNull();
       expect(result).toBe('success');
       expect(mockFunc).toHaveBeenCalledTimes(3);
       expect(retryCallback).toHaveBeenCalledTimes(2);
-      expect(delayCallback).toHaveBeenCalledTimes(2);
       expect(errorCallback).toHaveBeenCalledTimes(2);
     });
 
-    it('should handle complex retry logic with callbacks', async () => {
+    it('should handle complex retry logic with callbacks', () => {
       let callCount = 0;
       const mockFunc = jest.fn(() => {
         callCount++;
@@ -620,20 +446,13 @@ describe(retry.name, () => {
         const error = status.error as Error;
         return status.index < 5 && error?.message !== 'Fatal';
       });
-      const delayCallback = jest.fn((status) => {
-        return status.index * 50;
-      });
       const errorCallback = jest.fn();
 
-      const promise = retry(mockFunc, {
+      const [error, result] = retry(mockFunc, {
         retry: retryCallback,
-        delay: delayCallback,
         error: errorCallback,
       });
-      await jest.advanceTimersByTimeAsync(50);
-      await jest.advanceTimersByTimeAsync(100);
 
-      const [error, result] = await promise;
       expect(error).toBeInstanceOf(Error);
       expect((error as Error).message).toBe('Fatal');
       expect(result).toBeNull();

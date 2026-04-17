@@ -35,8 +35,9 @@ export type RetryOptions = {
    */
   retry?: number | RetryCallback<boolean>;
   /**
-   * @description Retry delays, in milliseconds (no delay by default),
-   * or a callback that returns the delays.
+   * @description Retry delays, in milliseconds (no delay by default), or a callback that returns the delays.
+   *
+   * **NOTE** Only supported in {@link retryAsync}. Ignored in {@link retry}.
    */
   delay?: number | RetryCallback<number>;
   /**
