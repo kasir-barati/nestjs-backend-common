@@ -1,5 +1,12 @@
 # Contributing to nestjs-backend-common
 
+To build the docs locally:
+
+```shell
+pnpm install --frozen-lockfile
+pnpm run docs
+```
+
 ## Automated Version Bumping
 
 **⚠️ Important: Manual version bumps are NOT allowed!**

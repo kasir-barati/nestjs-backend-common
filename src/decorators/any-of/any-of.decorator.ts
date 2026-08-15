@@ -3,6 +3,8 @@ import { IsDefined, ValidateIf } from 'class-validator';
 
 /**
  * @description
+ * Assume you have a lot of optional fields in your DTO and you wanna make sure that at least one of them were sent by the client.
+ *
  * Do not annotate the fields with `@IsOptional` since it will not validate them at all. Learn how to use it by reading the unit tests.
  */
 export function AnyOf(properties: string[]) {

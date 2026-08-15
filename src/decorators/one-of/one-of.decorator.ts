@@ -11,6 +11,8 @@ import { isNil } from '../../utils';
 
 /**
  * @description
+ * Assume you wanna enforce that client can only send one of the fields in your DTO and not both of them at the same time.
+ *
  * Throws an error if more than one of the properties are present in the request body/querystring. Learn how to use it by reading the unit tests.
  */
 export function OneOf(properties: string[]) {
