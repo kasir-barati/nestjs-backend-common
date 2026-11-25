@@ -1,4 +1,4 @@
-# NestJS Backend Common
+<h1><img src="./logo.svg" width="40" height="40" alt="NestJS Backend Common logo" /> NestJS Backend Common</h1>
 
 All the utility functions and common modules I usually use in my NestJS applications will be published and maintained here.
 

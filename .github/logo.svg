@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 180">
+  <title>NBC - nestjs-backend-common</title>
+
+  <!-- N -->
+  <path d="M25 30 H55 L90 105 V30 H120 V150 H90 L55 75 V150 H25 Z"
+        fill="#202A35"/>
+  <path d="M55 30 H70 V90 H55 Z" fill="#E65B48"/>
+  <path d="M90 105 H120 V150 H90 Z" fill="#E65B48"/>
+
+  <!-- B -->
+  <path d="M145 30 H180 C218 30 218 80 185 88 C226 96 222 150 180 150 H145 Z"
+        fill="#202A35"/>
+  <path d="M175 55 H180 C194 55 194 75 180 75 H175 Z"
+        fill="#FFFFFF"/>
+  <path d="M175 105 H183 C199 105 199 127 183 127 H175 Z"
+        fill="#FFFFFF"/>
+  <path d="M145 30 H160 V150 H145 Z" fill="#E65B48"/>
+
+  <!-- C -->
+  <path d="M270 30 H335 V58 H298 C275 58 275 122 298 122 H335 V150 H270 C220 150 220 30 270 30 Z"
+        fill="#202A35"/>
+  <path d="M270 30 H295 V58 H270 Z" fill="#E65B48"/>
+  <path d="M270 122 H295 V150 H270 Z" fill="#E65B48"/>
+</svg>
